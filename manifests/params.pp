@@ -45,6 +45,10 @@ class puppetdb::params {
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
     }
+    
+    'FreeBSD': {
+      $firewall_supported       = false
+    }
     default: {
       $firewall_supported       = false
     }
@@ -86,8 +90,14 @@ class puppetdb::params {
       'Debian': {
         $puppetdb_initconf = '/etc/default/puppetdb'
       }
+      'FreeBSD': {
+        $confdir           = '/usr/local/etc/puppetdb/conf.d'
+        $puppet_confdir    = '/usr/local/etc/puppet'
+        $embedded_subname  = 'file:/usr/local/share/puppetdb/db/db;hsqldb.tx=mvcc;sql.syntax_pgs=true'
+        $puppetdb_initconf = '/usr/local/etc/rc.d/puppetdb'
+      }
       default: {
-        fail("${module_name} supports osfamily's RedHat and Debian. Your osfamily is recognized as ${::osfamily}")
+        fail("${module_name} supports osfamily's RedHat, Debian and FreeBSD. Your osfamily is recognized as ${::osfamily}")
       }
     }
   }
