@@ -468,6 +468,7 @@ Platforms:
 * Debian6
 * Ubuntu 10.04
 * Archlinux
+* FreeBSD
 
 Development
 ------------
