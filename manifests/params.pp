@@ -45,7 +45,7 @@ class puppetdb::params {
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
     }
-    
+
     'FreeBSD': {
       $firewall_supported       = false
     }
@@ -77,11 +77,21 @@ class puppetdb::params {
   } else {
     $puppetdb_package     = 'puppetdb'
     $puppetdb_service     = 'puppetdb'
-    $confdir              = '/etc/puppetdb/conf.d'
     $puppet_service_name  = 'puppetmaster'
-    $puppet_confdir       = '/etc/puppet'
     $terminus_package     = 'puppetdb-terminus'
-    $embedded_subname     = 'file:/usr/share/puppetdb/db/db;hsqldb.tx=mvcc;sql.syntax_pgs=true'
+
+    case $::osfamily {
+      'FreeBSD': {
+        $confdir          = '/usr/local/etc/puppetdb/conf.d'
+        $puppet_confdir   = '/usr/local/etc/puppet'
+        $embedded_subname = 'file:/usr/local/share/puppetdb/db/db;hsqldb.tx=mvcc;sql.syntax_pgs=true'
+      }
+      default: {
+        $confdir          = '/etc/puppetdb/conf.d'
+        $puppet_confdir   = '/etc/puppet'
+        $embedded_subname = 'file:/usr/share/puppetdb/db/db;hsqldb.tx=mvcc;sql.syntax_pgs=true'
+      }
+    }
 
     case $::osfamily {
       'RedHat', 'Suse', 'Archlinux': {
@@ -91,9 +101,6 @@ class puppetdb::params {
         $puppetdb_initconf = '/etc/default/puppetdb'
       }
       'FreeBSD': {
-        $confdir           = '/usr/local/etc/puppetdb/conf.d'
-        $puppet_confdir    = '/usr/local/etc/puppet'
-        $embedded_subname  = 'file:/usr/local/share/puppetdb/db/db;hsqldb.tx=mvcc;sql.syntax_pgs=true'
         $puppetdb_initconf = '/usr/local/etc/rc.d/puppetdb'
       }
       default: {
