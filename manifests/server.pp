@@ -27,7 +27,7 @@ class puppetdb::server(
   $puppetdb_service        = $puppetdb::params::puppetdb_service,
   $puppetdb_service_status = $puppetdb::params::puppetdb_service_status,
   $confdir                 = $puppetdb::params::confdir,
-  $manage_firewall         = true,
+  $manage_firewall         = false,
   $java_args               = {}
 ) inherits puppetdb::params {
 
